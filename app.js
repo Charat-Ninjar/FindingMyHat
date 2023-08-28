@@ -6,7 +6,15 @@
 // Codecademy: https://www.codecademy.com/paths/front-end-engineer-career-path/tracks/fecp-javascript-syntax-part-iii/modules/fecp-challenge-project-find-your-hat/projects/find-your-hat
 
 // Please break down your thinking process step-by-step (mandatory)
-// step 1 :
+ /*
+step 1 : ในเกม ต้องมีอะไรบ้าง แมพ ตัวละคน อุปสรรค์ หมวก
+step 2 : สร้าง class Field เพิ่อเก็บ field และ สร้างฟังก์ชั่นต่างๆ
+step 3 : สร้างแมพ user กำหนดขนาดเอง
+step 3.2 : ลองเขียนแมพโดยรับขนาดจาก input (on fieldCharacter) ก่อน -> set Obstacles -> set player and hat
+step 4 : สร้างฟังก์ชันเดิน จาก input  (U, D, R, L) รับค่าแล้วมาสร้างเงื่อนไข อัพเดทตำแหน่งตัวละคร
+step 5 : ระบุเงื่อนไขไม่ให้ออกจากแมพด้วย กำหนดเงื่อนไขเมื่อเจอหมวก หรือตกหลุม
+step 6 : 
+ */
 
 
 
@@ -14,10 +22,11 @@
 
 const prompt = require('prompt-sync')({ sigint: true }); // This sends a SIGINT, or “signal interrupt” message indicating that a user wants to exit a program by press Crtl+c
 const clear = require('clear-screen');//every turn clear the screen that meant you will not get new field in time you choose the direction
-const hat = '^';
-const hole = 'O';
-const fieldCharacter = '░';
-const pathCharacter = '*';
+let hat = '🎓';
+const hole = '💥';
+const fieldCharacter = '⬜️'
+//const fieldCharacter = '░';
+let pathCharacter = '🐯';
 
 class Field {
     constructor(field) {
@@ -55,13 +64,12 @@ class Field {
                     if (x !== 0) {
                         x -= 1
                     } else {
-                        console.log("You cant go up, out of map")
-                        isPlaying = false;
+                        console.log("You cant go that way, out of map")
                     }
                     break;
                 case "L":
                     if (y === 0) {
-                        console.log("You cant go left, out of map")
+                        console.log("You cant go that way, out of map")
                         break;
                     } else {
                         y -= 1
@@ -69,14 +77,14 @@ class Field {
                     break;
                 case "D":
                     if (x === getHeight - 1) {
-                        console.log("You cant go down, out of map")
+                        console.log("You cant go that way, out of map")
                         break;
                     } else
                         x += 1
                         break;
                 case "R":
                     if (y === getWidth - 1) {
-                        console.log("You cant go Right, out of map")
+                        console.log("You cant go that way, out of map")
                         break;
                     } else {
                         y += 1
@@ -87,10 +95,12 @@ class Field {
                     break;
             }
             if (this.field[x][y] == hat) {
-                console.log("You've successfully retrieved the hat! You win!");
+              hat = pathCharacter
+              console.log(this.print())
+                console.log("You've made it! You win!");
                 isPlaying = false;
             } else if (this.field[x][y] === hole) {
-                console.log('Game Over! You fell through the hole!');
+                console.log('Game Over! You got shot!');
                 isPlaying = false;
                 break;
             } else {

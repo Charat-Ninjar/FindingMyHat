@@ -1,116 +1,142 @@
-const prompt = require('prompt-sync')({sigint: true});
+// Please copy and paste your GitHub Repo on line 2 (optional)
+// <GitHub Repo>
 
+// JavaScript Assessment Rubric: https://generation.instructure.com/courses/2342/assignments/143783
+
+// Codecademy: https://www.codecademy.com/paths/front-end-engineer-career-path/tracks/fecp-javascript-syntax-part-iii/modules/fecp-challenge-project-find-your-hat/projects/find-your-hat
+
+// Please break down your thinking process step-by-step (mandatory)
+// step 1 :
+
+
+
+// JS Assessment: Find your hat //
+
+const prompt = require('prompt-sync')({ sigint: true }); // This sends a SIGINT, or “signal interrupt” message indicating that a user wants to exit a program by press Crtl+c
+const clear = require('clear-screen');//every turn clear the screen that meant you will not get new field in time you choose the direction
 const hat = '^';
 const hole = 'O';
 const fieldCharacter = '░';
 const pathCharacter = '*';
 
 class Field {
-  constructor(field) {
-    this._field = field;
-  }
-  // Getters
-  get field() {
-    return this._field;
-  }
-  // Methods
-  playGame() {
-    let currentlyPlaying = true;
-    let x = 0;
-    let y = 0;
-    console.log(this.print());
-    let moveSelection;
-    while (currentlyPlaying) {
-      moveSelection = prompt("Which way would you like to move? (Up = 'U' Down = 'D' Left = 'L' Right = 'R'");
-      // Options for a user's move selection
-      if (moveSelection.toUpperCase() === 'U' && y !== 0) {
-        y -= 1;
-      } else if (moveSelection.toUpperCase() === 'U' && y === 0) {
-        console.log('You have already reached the top of the board');
-      } else if (moveSelection.toUpperCase() === 'D' && y !== (inputHeight - 1)) {
-        y += 1;
-      } else if (moveSelection.toUpperCase() === 'D' && y === (inputHeight - 1)) {
-        console.log('You have already reached the bottom of the board');
-      } else if (moveSelection.toUpperCase() === 'L' && x !== 0) {
-        x -= 1;
-      } else if (moveSelection.toUpperCase() === 'L' && x === 0) {
-        console.log('You have already reached the left side of the board');
-      } else if (moveSelection.toUpperCase() === 'R' && x !== (inputWidth - 1)) {
-        x += 1;
-      } else if (moveSelection.toUpperCase() === 'R' && x === (inputWidth - 1)) {
-        console.log('You have already reached the right side of the board');
-      } else if (moveSelection === 'clear') {
-        break;
-      } else {
-        console.log('Invalid Entry');
-      }
-      if (this.field[y][x] === hat) {
-        console.log("You've successfully retrieved the hat! You win!");
-        currentlyPlaying = false;
-        break;
-      } else if (this.field[y][x] === hole){
-        console.log('Game Over! You fell through the hole!');
-        currentlyPlaying = false;
-        break;
-      } else {
-        this.field[y][x] = pathCharacter;
+    constructor(field) {
+        this._field = field;
+        // this.positionX = 0;
+        // this.positionY = 0;
+        // Set the "home" position before the game starts
+    }
+
+
+
+    //print field method to make it eaier 
+
+    // the rest of your code starts here.
+    get field() {
+        return this._field
+    }
+
+    set field(newField) {
+        this._field = newField
+    }
+
+    play() {
+        let x = 0
+        let y = 0
+        let moveMent;
+        let isPlaying = true;
         console.log(this.print());
-      }
-    }
-  }
+        while (isPlaying) {
+            moveMent = prompt("Select Direction (U = up, L = left, D = down, R = Right)")
+            this.field[x][y] = fieldCharacter;
 
-  print () {
-    return this.field.map(row => row.join('')).join('\n');
-  }
-
-  static generateField(height, width, percentage) {
-    // Helper Functions
-    const countFieldCharacters = arrayOfHolesAndFieldCharacters => {
-      let fieldCharacterCount = 0;
-      for (let j = 0; j < arrayOfHolesAndFieldCharacters.length; j++) {
-        if (arrayOfHolesAndFieldCharacters[j] === fieldCharacter) {
-          fieldCharacterCount++;
+            switch (moveMent.toUpperCase()) {
+                case "U":
+                    if (x !== 0) {
+                        x -= 1
+                    } else {
+                        console.log("You cant go up, out of map")
+                        isPlaying = false;
+                    }
+                    break;
+                case "L":
+                    if (y === 0) {
+                        console.log("You cant go left, out of map")
+                        break;
+                    } else {
+                        y -= 1
+                    }
+                    break;
+                case "D":
+                    if (x === getHeight - 1) {
+                        console.log("You cant go down, out of map")
+                        break;
+                    } else
+                        x += 1
+                        break;
+                case "R":
+                    if (y === getWidth - 1) {
+                        console.log("You cant go Right, out of map")
+                        break;
+                    } else {
+                        y += 1
+                    }
+                    break;
+                default:
+                    console.log('Invalid Entry');
+                    break;
+            }
+            if (this.field[x][y] == hat) {
+                console.log("You've successfully retrieved the hat! You win!");
+                isPlaying = false;
+            } else if (this.field[x][y] === hole) {
+                console.log('Game Over! You fell through the hole!');
+                isPlaying = false;
+                break;
+            } else {
+                let previousPath = //
+                this.field[x][y] = pathCharacter;
+                console.log(this.print());
+            }
         }
-      }
-      return fieldCharacterCount;
-  }
-    // Creating a field with only holes and field characters
-    let outputField = [];
-    let randomInt;
-    let currentArray = [];
-    let rowCount = 0;
-    while (rowCount < height) {
-      for (let i = 0; i < width; i++) {
-        randomInt = Math.ceil(Math.random() * 2);
-        if (randomInt === 1) {
-          currentArray.push(fieldCharacter);
-        } else {
-          currentArray.push(hole);
-        }
-      }
-      if ((countFieldCharacters(currentArray) / width) * 100 >= percentage) {
-        outputField.push(currentArray);
-        rowCount++;
-      }
-        currentArray = [];
     }
-    // Adding in hat and pathcharacter
-    const randomHatHeight = Math.floor(Math.random() * height);
-    const randomHatWidth = Math.floor(Math.random() * width);
-    outputField[0][0] = pathCharacter;
-    outputField[0][1] = fieldCharacter;
-    outputField[randomHatHeight][randomHatWidth] = hat;
-    return outputField;
-  }
+
+    print() {
+        clear();
+        // your print map code here
+        return this._field.map(row => row.join('')).join('\n');
+    }
+
+    static generateField(width, height, percentage) {
+        const mapWidth = width
+        const mapHeight = height
+        const field = new Array(mapWidth);
+        for (let i = 0; i < mapHeight; i++) {
+            field[i] = Array(mapWidth).fill(fieldCharacter)
+        }
+        const holeCount = Math.floor((percentage / 100) * (mapHeight * mapWidth));
+        for (let i = 0; i < holeCount; i++) {
+            const randomRow = Math.floor(Math.random() * mapHeight);
+            const randomCol = Math.floor(Math.random() * mapWidth);
+            field[randomRow][randomCol] = hole;
+        }
+
+        const randomHatHeight = Math.floor(Math.random() * height);
+        const randomHatWidth = Math.floor(Math.random() * width);
+        field[randomHatHeight][randomHatWidth] = hat;
+
+        field[0][0] = pathCharacter;
+        return field
+    }
+
+
 }
 
-// GAME IN PROGRESS
-// Prompts at the beginning of the game to generate field
-let inputHeight = prompt('How tall would you like your game field to be?');
-let inputWidth = prompt('How wide?');
-let inputPercentage = prompt('Percentage of pathway vs. holes?');
-const generatedField = Field.generateField(Number(inputHeight), Number(inputWidth), Number(inputPercentage));
-
-//const generatedField = Field.generateField(20, 10, 60)
-const gameField = new Field(generatedField);
-gameField.playGame();
+let newField = new Field()
+let getHeight = prompt("How tall Map?")
+let getWidth = prompt("How width Map?")
+let getObstacles = prompt("Obstacles percentage?")
+const generatedField = Field.generateField(Number(getWidth), Number(getHeight), Number(getObstacles));
+// const generatedField = Field.generateField(10, 8, 10);
+newField.field = generatedField
+newField.play()
